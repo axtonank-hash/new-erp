@@ -1,0 +1,69 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: gegok12_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gegok12
+      MYSQL_USER: gegok12
+      MYSQL_PASSWORD: gegok12
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - gegok12_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: gegok12_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - gegok12_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 5s
+      retries: 5
+
+  nextjs:
+    build:
+      context: ./next-app
+      dockerfile: Dockerfile
+    container_name: gegok12_nextjs
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: gegok12
+      DB_PASSWORD: gegok12
+      DB_NAME: gegok12
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: your_jwt_secret_key_change_in_production
+      API_URL: http://localhost:3000
+    volumes:
+      - ./next-app:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - gegok12_network
+    command: npm run dev
+
+volumes:
+  mysql_data:
+
+networks:
+  gegok12_network:
+    driver: bridge
