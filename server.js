@@ -357,6 +357,128 @@ app.get('/api/docs', (req, res) => {
 });
 
 // ═════════════════════════════════════════════════════════════════════════════
+// Demo Data Endpoints
+// ═════════════════════════════════════════════════════════════════════════════
+
+// Sample data store (in-memory for demo purposes)
+let demoData = {
+  students: [],
+  faculty: [],
+  attendance: [],
+  admissions: []
+};
+
+app.get('/api/demo/load', (req, res) => {
+  const type = req.query.type || 'all';
+
+  if (type === 'students' || type === 'all') {
+    demoData.students = [
+      { id: 'stu_1', first_name: 'John', last_name: 'Doe', email: 'john@college.edu', class_id: 'class_1', enrollment_date: '2025-01-15' },
+      { id: 'stu_2', first_name: 'Jane', last_name: 'Smith', email: 'jane@college.edu', class_id: 'class_1', enrollment_date: '2025-01-15' },
+      { id: 'stu_3', first_name: 'Robert', last_name: 'Johnson', email: 'robert@college.edu', class_id: 'class_2', enrollment_date: '2025-01-16' },
+      { id: 'stu_4', first_name: 'Emily', last_name: 'Williams', email: 'emily@college.edu', class_id: 'class_2', enrollment_date: '2025-01-16' },
+      { id: 'stu_5', first_name: 'Michael', last_name: 'Brown', email: 'michael@college.edu', class_id: 'class_3', enrollment_date: '2025-01-17' }
+    ];
+  }
+
+  if (type === 'faculty' || type === 'all') {
+    demoData.faculty = [
+      { id: 'fac_1', first_name: 'Dr.', last_name: 'Johnson', email: 'johnson@college.edu', department: 'Science', position: 'Professor' },
+      { id: 'fac_2', first_name: 'Prof.', last_name: 'Williams', email: 'williams@college.edu', department: 'Arts', position: 'Associate Professor' },
+      { id: 'fac_3', first_name: 'Dr.', last_name: 'Martinez', email: 'martinez@college.edu', department: 'Engineering', position: 'Assistant Professor' },
+      { id: 'fac_4', first_name: 'Prof.', last_name: 'Taylor', email: 'taylor@college.edu', department: 'Commerce', position: 'Professor' }
+    ];
+  }
+
+  if (type === 'attendance' || type === 'all') {
+    const today = new Date().toISOString().split('T')[0];
+    demoData.attendance = [
+      { id: 'att_1', student_id: 'stu_1', date: today, status: 'present', class_id: 'class_1' },
+      { id: 'att_2', student_id: 'stu_2', date: today, status: 'present', class_id: 'class_1' },
+      { id: 'att_3', student_id: 'stu_3', date: today, status: 'absent', class_id: 'class_2' },
+      { id: 'att_4', student_id: 'stu_4', date: today, status: 'present', class_id: 'class_2' },
+      { id: 'att_5', student_id: 'stu_5', date: today, status: 'present', class_id: 'class_3' }
+    ];
+  }
+
+  if (type === 'admissions' || type === 'all') {
+    demoData.admissions = [
+      { id: 'adm_1', first_name: 'Alex', last_name: 'Brown', email: 'alex@example.com', status: 'pending', program: 'CS', application_date: '2026-01-10' },
+      { id: 'adm_2', first_name: 'Sara', last_name: 'Green', email: 'sara@example.com', status: 'accepted', program: 'Engineering', application_date: '2026-01-05' },
+      { id: 'adm_3', first_name: 'Tom', last_name: 'White', email: 'tom@example.com', status: 'under_review', program: 'Science', application_date: '2026-01-15' },
+      { id: 'adm_4', first_name: 'Lisa', last_name: 'Black', email: 'lisa@example.com', status: 'accepted', program: 'Arts', application_date: '2026-01-01' }
+    ];
+  }
+
+  res.json({
+    success: true,
+    message: `Demo data loaded for ${type}`,
+    data: {
+      students: demoData.students.length,
+      faculty: demoData.faculty.length,
+      attendance: demoData.attendance.length,
+      admissions: demoData.admissions.length,
+      timestamp: new Date()
+    }
+  });
+});
+
+app.get('/api/demo/students', (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const start = (page - 1) * limit;
+  const items = demoData.students.slice(start, start + limit);
+
+  res.json({
+    success: true,
+    data: {
+      items: items.length > 0 ? items : demoData.students,
+      pagination: { page, limit, total: demoData.students.length, pages: Math.ceil(demoData.students.length / limit) }
+    }
+  });
+});
+
+app.get('/api/demo/faculty', (req, res) => {
+  res.json({
+    success: true,
+    data: {
+      items: demoData.faculty,
+      pagination: { page: 1, limit: 10, total: demoData.faculty.length, pages: 1 }
+    }
+  });
+});
+
+app.get('/api/demo/attendance', (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 50;
+  const start = (page - 1) * limit;
+  const items = demoData.attendance.slice(start, start + limit);
+
+  res.json({
+    success: true,
+    data: {
+      items: items.length > 0 ? items : demoData.attendance,
+      pagination: { page, limit, total: demoData.attendance.length, pages: Math.ceil(demoData.attendance.length / limit) }
+    }
+  });
+});
+
+app.get('/api/demo/admissions', (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const start = (page - 1) * limit;
+  const items = demoData.admissions.slice(start, start + limit);
+
+  res.json({
+    success: true,
+    data: {
+      items: items.length > 0 ? items : demoData.admissions,
+      pagination: { page, limit, total: demoData.admissions.length, pages: Math.ceil(demoData.admissions.length / limit) }
+    }
+  });
+});
+
+// ═════════════════════════════════════════════════════════════════════════════
 // Error Handling
 // ═════════════════════════════════════════════════════════════════════════════
 
