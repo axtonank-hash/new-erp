@@ -71,8 +71,9 @@ class DatabaseSeeder extends Seeder
         $this->call(PayCategoryTableSeeder::class);
         $this->call(PayrollItemTableSeeder::class);
         $this->call(TransactionTypeTableSeeder::class);
-        
         $this->call(TrasactionAccountTableSeeder::class);
-          
+
+        // Nursing & Pharmacy initial data
+        $this->call(NursingPharmacySeeder::class);
     }
 }

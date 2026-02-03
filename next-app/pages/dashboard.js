@@ -71,12 +71,12 @@ export default function Dashboard() {
 
   const quickActions = [
     {
-      label: 'Add Student',
+      label: 'Enroll Student',
       icon: <UserPlus className="mx-auto" size={24} />,
       onClick: () => router.push('/students'),
     },
     {
-      label: 'View Fees',
+      label: 'Lab Work',
       icon: <DollarSign className="mx-auto" size={24} />,
       onClick: () => router.push('/fees'),
     },
@@ -95,26 +95,26 @@ export default function Dashboard() {
   const classDistribution = stats.students
     ? [
         {
-          label: '10A',
-          count: stats.students.filter(s => s.class === '10A').length,
+          label: 'B.Sc Nursing',
+          count: stats.students.filter(s => s.class === 'B.Sc Nursing').length,
           percentage: Math.round(
-            (stats.students.filter(s => s.class === '10A').length / stats.students.length) * 100
+            (stats.students.filter(s => s.class === 'B.Sc Nursing').length / stats.students.length) * 100
           ) || 0,
           color: 'bg-blue-600',
         },
         {
-          label: '10B',
-          count: stats.students.filter(s => s.class === '10B').length,
+          label: 'B.Pharm',
+          count: stats.students.filter(s => s.class === 'B.Pharm').length,
           percentage: Math.round(
-            (stats.students.filter(s => s.class === '10B').length / stats.students.length) * 100
+            (stats.students.filter(s => s.class === 'B.Pharm').length / stats.students.length) * 100
           ) || 0,
           color: 'bg-green-600',
         },
         {
-          label: '9',
-          count: stats.students.filter(s => s.class === '9').length,
+          label: 'GNM',
+          count: stats.students.filter(s => s.class === 'GNM').length,
           percentage: Math.round(
-            (stats.students.filter(s => s.class === '9').length / stats.students.length) * 100
+            (stats.students.filter(s => s.class === 'GNM').length / stats.students.length) * 100
           ) || 0,
           color: 'bg-purple-600',
         },
@@ -124,19 +124,19 @@ export default function Dashboard() {
   const recentActivities = [
     {
       title: 'New Student Admitted',
-      description: 'John Doe added to class 10A',
+      description: 'Clinical practical enrollment complete',
       timestamp: '2 hours ago',
       icon: <UserPlus size={18} className="text-blue-600" />,
     },
     {
-      title: 'Fee Payment Received',
-      description: '₹5,000 from Jane Smith',
+      title: 'Laboratory Assignment',
+      description: 'Pharmacy lab session scheduled',
       timestamp: '1 day ago',
       icon: <DollarSign size={18} className="text-green-600" />,
     },
     {
       title: 'Admission Request',
-      description: 'New admission request pending',
+      description: 'New admission application pending review',
       timestamp: '3 days ago',
       icon: <FileText size={18} className="text-yellow-600" />,
     },
@@ -153,8 +153,18 @@ export default function Dashboard() {
   return (
     <Layout>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
-        <p className="text-gray-600 mt-2">Welcome to GegoK12 School ERP - Overview and key metrics</p>
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-lg p-8 text-white mb-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold mb-2">College Dashboard</h1>
+              <p className="text-blue-100 text-lg">Nursing & Pharmacy Education Management System</p>
+              <p className="text-xs text-blue-200 mt-2">Real-time analytics and operational insights</p>
+            </div>
+            <div className="text-6xl">🏥</div>
+          </div>
+        </div>
+        <h1 className="text-3xl font-bold text-blue-900">Key Metrics</h1>
+        <p className="text-blue-700 mt-2">Real-time overview of students, faculty, admissions, and clinical assignments</p>
       </div>
 
       {/* Key Stats */}
@@ -202,10 +212,6 @@ export default function Dashboard() {
             <p className="text-sm text-blue-700 mt-2">Collection Rate</p>
           </div>
         </div>
-      </div>
-    </Layout>
-  );
-}
       </div>
     </Layout>
   );

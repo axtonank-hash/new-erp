@@ -1,3 +1,19 @@
+        // Clinical Logbooks
+        Route::apiResource('clinical-logbooks', 'Api\NursingPharmacyClinicalLogbookController');
+        Route::post('clinical-logbooks/{logbook}/submit', 'Api\NursingPharmacyClinicalLogbookController@submit');
+        Route::post('clinical-logbooks/{logbook}/approve', 'Api\NursingPharmacyClinicalLogbookController@approve');
+        Route::post('clinical-logbooks/{logbook}/reject', 'Api\NursingPharmacyClinicalLogbookController@reject');
+        Route::post('clinical-logbooks/{logbook}/lock', 'Api\NursingPharmacyClinicalLogbookController@lock');
+    // Lab Practicals
+    Route::apiResource('lab-practicals', 'Api\NursingPharmacyLabPracticalController');
+    Route::post('lab-practicals/{practical}/attendance', 'Api\NursingPharmacyLabPracticalController@recordAttendance');
+    Route::get('lab-practicals/{practical}/attendance', 'Api\NursingPharmacyLabPracticalController@getAttendance');
+    Route::get('lab-practicals/{practical}/marks', 'Api\NursingPharmacyLabPracticalController@getMarkStatistics');
+    Route::post('lab-practicals/{practical}/complete', 'Api\NursingPharmacyLabPracticalController@markCompleted');
+// Nursing & Pharmacy Phase 2: Student Management
+Route::apiResource('clinical-postings', 'ClinicalPostingController');
+Route::apiResource('student-documents', 'StudentDocumentController');
+Route::apiResource('hospital-affiliations', 'HospitalAffiliationController');
 <?php
 
 @include('teacherapi.php');
@@ -261,9 +277,49 @@ Route::group([
         
     Route::post('/student/modules','StudentHistoryController@update');
 
-    
+    // Phase 1.1: Nursing & Pharmacy Program Management
+    Route::prefix('nursing-pharmacy')->group(function () {
+            // Compliance & Inspection
+            Route::get('compliance/audits', 'Api\NursingPharmacyComplianceController@listAudits');
+            Route::post('compliance/audits', 'Api\NursingPharmacyComplianceController@createAudit');
+            Route::get('compliance/matrices', 'Api\NursingPharmacyComplianceController@listMatrices');
+            Route::post('compliance/matrices', 'Api\NursingPharmacyComplianceController@createMatrix');
+            Route::get('compliance/audits/{id}', 'Api\NursingPharmacyComplianceController@showAudit');
+            Route::put('compliance/audits/{id}', 'Api\NursingPharmacyComplianceController@updateAudit');
+            Route::delete('compliance/audits/{id}', 'Api\NursingPharmacyComplianceController@deleteAudit');
+            Route::get('compliance/matrices/{id}', 'Api\NursingPharmacyComplianceController@showMatrix');
+            Route::put('compliance/matrices/{id}', 'Api\NursingPharmacyComplianceController@updateMatrix');
+            Route::delete('compliance/matrices/{id}', 'Api\NursingPharmacyComplianceController@deleteMatrix');
+        // Programs
+        Route::apiResource('programs', 'NursingPharmacyProgramController');
+        // Subjects
+        Route::apiResource('subjects', 'NursingPharmacySubjectController');
+        // Curricula
+        Route::apiResource('curricula', 'NursingPharmacyCurriculumController');
+
+        // Faculty
+        Route::apiResource('faculty', 'Api\NursingPharmacyFacultyController');
+        Route::post('faculty/{faculty}/assign-subject', 'Api\NursingPharmacyFacultyController@assignSubject');
+        Route::get('faculty/{faculty}/subjects', 'Api\NursingPharmacyFacultyController@getSubjects');
+        Route::get('faculty/{faculty}/availability', 'Api\NursingPharmacyFacultyController@getAvailability');
+        Route::get('faculty/{faculty}/compliance', 'Api\NursingPharmacyFacultyController@getCompliance');
+
+        // Attendance
+        Route::post('attendance/record', 'Api\NursingPharmacyAttendanceController@recordAttendance');
+        Route::post('attendance/bulk', 'Api\NursingPharmacyAttendanceController@bulkRecord');
+        Route::get('attendance/student/{studentId}/summary', 'Api\NursingPharmacyAttendanceController@getStudentSummary');
+        Route::get('attendance/student/{studentId}/eligibility', 'Api\NursingPharmacyAttendanceController@checkEligibility');
+        Route::get('attendance/thresholds/{programId}', 'Api\NursingPharmacyAttendanceController@getThresholds');
+        Route::get('attendance/department/{departmentId}/report', 'Api\NursingPharmacyAttendanceController@getDepartmentReport');
+        Route::post('attendance/{record}/approve', 'Api\NursingPharmacyAttendanceController@approveAttendance');
+        // Examinations
+        Route::apiResource('examinations', 'Api\NursingPharmacyExaminationController');
+        // Results
+        Route::apiResource('results', 'Api\NursingPharmacyResultController');
+    });
 
 });
+
 
 Route::get('/bloodGroup/list','Api\TestController@getBloodGroup');
 
@@ -278,6 +334,23 @@ Route::get('/events/show/details/{id}','Api\EventsController@showdetails');
 //Testing Purpose start
 
 //Route::get('/users', 'Api\TestController@index');
+
+// Phase 4: Examination & Compliance APIs
+Route::prefix('v2/exam-compliance')->namespace('Api')->middleware(['auth:sanctum'])->group(function () {
+    // Examination
+    Route::apiResource('exams', 'ExamController');
+    Route::apiResource('results', 'ResultController');
+    Route::get('result-analytics', 'ResultAnalyticsController@index');
+    Route::get('result-analytics/{id}', 'ResultAnalyticsController@show');
+
+    // Compliance
+    Route::get('compliance/reports', 'ComplianceController@listReports');
+    Route::post('compliance/reports', 'ComplianceController@createReport');
+    Route::get('compliance/audits', 'ComplianceController@listAudits');
+    Route::post('compliance/audits', 'ComplianceController@createAudit');
+    Route::get('compliance/matrices', 'ComplianceController@listMatrices');
+    Route::post('compliance/matrices', 'ComplianceController@createMatrix');
+});
 
 //Route::get('/teachers', 'Api\TestController@teachers');
 

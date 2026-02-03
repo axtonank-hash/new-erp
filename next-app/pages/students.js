@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Layout from '@/components/Layout';
 import SearchFilterBar from '@/components/SearchFilterBar';
 import ExportButton from '@/components/ExportButton';
@@ -109,8 +110,8 @@ export default function Students() {
     <Layout>
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Students</h1>
-          <p className="text-gray-600 mt-2">Manage student records</p>
+          <h1 className="text-3xl font-bold text-blue-900">Student Enrollment</h1>
+          <p className="text-blue-700 mt-2">Manage nursing and pharmacy student records</p>
         </div>
         <div className="flex gap-3">
           <ExportButton
@@ -123,7 +124,7 @@ export default function Students() {
             className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
           >
             <span>➕</span>
-            Add Student
+            Enroll Student
           </button>
         </div>
       </div>
@@ -231,8 +232,12 @@ export default function Students() {
               <tbody className="divide-y">
                 {filteredStudents.length > 0 ? (
                   filteredStudents.map((student) => (
-                    <tr key={student.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-800">{student.name}</td>
+                    <tr key={student.id} className="hover:bg-gray-50 cursor-pointer">
+                      <td className="px-6 py-4 text-sm text-gray-800">
+                        <Link href={`/students/${student.id}`} className="text-blue-600 hover:text-blue-800 font-semibold">
+                          {student.name}
+                        </Link>
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-600">{student.email}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{student.enrollmentNumber}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{student.class}</td>
@@ -257,18 +262,6 @@ export default function Students() {
             </div>
           </div>
         </>
-      )}
-                  <td className="px-6 py-4 text-sm text-gray-600">{student.class}</td>
-                  <td className="px-6 py-4 text-sm">
-                    <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-semibold">
-                      {student.status}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       )}
     </Layout>
   );

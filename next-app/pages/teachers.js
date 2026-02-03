@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Layout from '@/components/Layout';
 import SearchFilterBar from '@/components/SearchFilterBar';
 import ExportButton from '@/components/ExportButton';
@@ -121,8 +122,8 @@ export default function Teachers() {
     <Layout>
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Teachers</h1>
-          <p className="text-gray-600 mt-2">Manage teacher records</p>
+          <h1 className="text-3xl font-bold text-blue-900">Faculty Management</h1>
+          <p className="text-blue-700 mt-2">Manage nursing & pharmacy faculty records</p>
         </div>
         <div className="flex gap-3">
           <ExportButton
@@ -238,8 +239,12 @@ export default function Teachers() {
               <tbody className="divide-y">
                 {filteredTeachers.length > 0 ? (
                   filteredTeachers.map((teacher) => (
-                    <tr key={teacher.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 text-sm text-gray-800">{teacher.name}</td>
+                    <tr key={teacher.id} className="hover:bg-gray-50 cursor-pointer">
+                      <td className="px-6 py-4 text-sm text-gray-800">
+                        <Link href={`/teachers/${teacher.id}`} className="text-blue-600 hover:text-blue-800 font-semibold">
+                          {teacher.name}
+                        </Link>
+                      </td>
                       <td className="px-6 py-4 text-sm text-gray-600">{teacher.email}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{teacher.department}</td>
                       <td className="px-6 py-4 text-sm text-gray-600">{teacher.qualification}</td>

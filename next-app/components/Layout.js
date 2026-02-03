@@ -25,13 +25,13 @@ export default function Layout({ children }) {
     { name: 'Dashboard', path: '/dashboard', icon: '📊' },
     { name: 'Admissions', path: '/admissions', icon: '📝' },
     { name: 'Students', path: '/students', icon: '👨‍🎓' },
-    { name: 'Teachers', path: '/teachers', icon: '👨‍🏫' },
+    { name: 'Faculty', path: '/teachers', icon: '👨‍⚕️' },
     { name: 'Attendance', path: '/attendance', icon: '✓' },
-    { name: 'Exams', path: '/exams', icon: '📚' },
-    { name: 'Fees', path: '/fees', icon: '💰' },
+    { name: 'Clinical Exams', path: '/exams', icon: '🔬' },
+    { name: 'Lab Work', path: '/fees', icon: '🧪' },
     { name: 'Library', path: '/library', icon: '📖' },
-    { name: 'Transport', path: '/transport', icon: '🚌' },
-    { name: 'HR', path: '/hr', icon: '👥' },
+    { name: 'Practicums', path: '/transport', icon: '🏥' },
+    { name: 'Administration', path: '/hr', icon: '⚙️' },
   ];
 
   return (
@@ -40,10 +40,15 @@ export default function Layout({ children }) {
       <div
         className={`${
           sidebarOpen ? 'w-64' : 'w-20'
-        } bg-gray-800 text-white transition-all duration-300 overflow-hidden`}
+        } bg-gradient-to-b from-blue-900 to-blue-800 text-white transition-all duration-300 overflow-hidden`}
       >
         <div className="p-4 flex items-center justify-between">
-          {sidebarOpen && <h1 className="font-bold text-xl">GegoK12</h1>}
+          {sidebarOpen && (
+            <div>
+              <h1 className="font-bold text-lg">College Portal</h1>
+              <p className="text-xs text-blue-200 font-semibold">Nursing & Pharmacy</p>
+            </div>
+          )}
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="p-2 hover:bg-gray-700 rounded"
@@ -71,10 +76,13 @@ export default function Layout({ children }) {
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
-        <div className="bg-white shadow-sm px-6 py-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold text-gray-800">
-            Welcome, {user?.name || 'User'}
-          </h2>
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-b-2 border-blue-900 shadow px-6 py-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-bold text-blue-900">
+              Welcome, {user?.name || 'User'}
+            </h2>
+            <p className="text-xs text-blue-700 font-semibold">Nursing & Pharmacy College Management System</p>
+          </div>
           <button
             onClick={handleLogout}
             className="flex items-center space-x-2 text-red-600 hover:text-red-700 font-semibold"

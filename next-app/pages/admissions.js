@@ -105,8 +105,8 @@ export default function Admissions() {
     <Layout>
       <div className="mb-8 flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">Admissions</h1>
-          <p className="text-gray-600 mt-2">Manage student admissions</p>
+          <h1 className="text-3xl font-bold text-blue-900">Admission Management</h1>
+          <p className="text-blue-700 mt-2">Review and process nursing & pharmacy program applications</p>
         </div>
         <div className="flex gap-3">
           <ExportButton
